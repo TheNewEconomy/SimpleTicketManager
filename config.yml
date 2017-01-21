@@ -1,0 +1,75 @@
+Core:
+
+    #All configurations relating to time formatting.
+    Time:
+        #The time format to use when displaying transaction history data.
+        Format: M, d y
+
+        #The timezone to use for transactions.
+        Timezone: US/Eastern
+
+    #All configurations relating to tickets in general.
+    Tickets:
+
+        #Maximum amount of tickets a single player can be assigned.
+        #Can be overriden with simpletickets.staff.nomax
+        Max: 10
+
+        #The maximum number of tickets display via /ticket view at once.
+        MaxTickets: 5;
+
+        #The maximum number of comments displayed via /ticket comments at once.
+        MaxComments: 5
+
+        #Whether or not other staff may close tickets without being assigned them. Can be overridden with the
+        #permissions node: simpletickets.close.override
+        OthersClose: false
+
+        #All configurations relating to message broadcasting.
+        Broadcast:
+
+            #Whether or not a broadcast should be sent to staff when a new ticket is created. Requires
+            #permission node simpletickets.staff.new
+            New: true
+
+            #Whether or not staff should receive a message on join with some statistics about tickets.
+            Join: true
+
+            #Whether or not staff should receive a notice when a ticket has been closed. Requires
+            #permission node simpletickets.staff.close
+            Close: true
+
+    #All configurations relating more to general server-related functions.
+    Server:
+
+        #Whether or not tickets should only be accessible on the server they were created
+        Specific: false
+
+    #All configurations relating to the MySQL Database
+    MySQL:
+
+        #All configurations relating to direct-SQL transactions for data
+        Transactions:
+            #Whether or not caching is enabled.
+            Cache: true
+
+            #The rate(in seconds) at which data from the cache is stored in the database.
+            Update: 600
+
+        #The prefix to use for SimpleTicketManager MySQL Tables
+        Prefix: ST
+
+        #The MySQL host
+        Host: localhost
+
+        #The MySQL port
+        Port: 3306
+
+        #The MySQL database
+        Database: Tickets
+
+        #Your MySQL user's name
+        User: user
+
+        #Your MySQL user's password
+        Password: password
