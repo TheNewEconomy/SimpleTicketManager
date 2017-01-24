@@ -87,7 +87,7 @@ public class TicketCloseCommand extends TNECommand {
     closed.addVariable("$username", getPlayer(sender).getName());
     closed.translate(SimpleTicketManager.instance.defaultWorld, sender);
 
-    if(SimpleTicketManager.instance.api.getBoolean("Core.Ticket.Broadcast.Close")) {
+    if(SimpleTicketManager.instance.api.getBoolean("Core.Tickets.Broadcast.Close")) {
       for(Player p : SimpleTicketManager.instance.getServer().getOnlinePlayers()) {
         if(p.hasPermission("simpletickets.staff.close")) {
           Message statistics = new Message("Messages.General.Close");

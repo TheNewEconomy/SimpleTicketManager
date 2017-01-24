@@ -16,6 +16,7 @@
  */
 package com.creatorfromhell.simpleticket.core.configurations;
 
+import com.creatorfromhell.simpleticket.SimpleTicketManager;
 import com.github.tnerevival.core.configurations.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -25,7 +26,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class MessageConfigurations extends Configuration {
   @Override
   public FileConfiguration getConfiguration() {
-    return null;
+    return SimpleTicketManager.instance.messageConfigurations;
   }
 
   @Override
@@ -36,11 +37,11 @@ public class MessageConfigurations extends Configuration {
   @Override
   public void load(FileConfiguration configurationFile) {
     configurations.put("Messages.General.Statistics", "<white>====== [<green>SimpleTicketManager<white>] ======<newline><white>There has been a total of <green>$total<white> tickets created.<newline><white>Of these, <green>$open<white> are open, <green>$assigned<white> have been assigned, and <green>$closed<white> have been closed.");
-    configurations.put("Messages.General.Ticket", "<white>Ticket: <green>$id<newline>Created by <green>$author<white>on<green>$created<white>.<newline>Status is <green>$status<white> with <green>$comments<white> $comments_string.<newline>Currently assigned: <green>$assignee<white>.<newline>Players Online: <green>$player_count<newline>$description");
+    configurations.put("Messages.General.Ticket", "<white>Ticket <green>$id<newline>Created by <green>$author<white>on<green>$created<white>.<newline>Status is <green>$status<white> with <green>$comments<white> $comments_string.<newline>Currently assigned <green>$assignee<white>.<newline>Players Online <green>$player_count<newline>$description");
     configurations.put("Messages.General.Comment", "<white>Comment <green>#$id<white> posted by <green>$author<white> on <green>$created<newline>$comment");
     configurations.put("Messages.General.CommentsHeader", "<white>Comments for Ticket <green>#$id<white>. Page <green>$page<white>/$max.");
     configurations.put("Messages.General.TicketHeader", "<white>====== [<green>Simple Tickets<white>] ====== Page <green>$page<white>/$max.");
-    configurations.put("Messages.General.TicketShort", "<white>Ticket: <green>$id<newline>$description");
+    configurations.put("Messages.General.TicketShort", "<white>Ticket <green>$id<newline>$description");
     configurations.put("Messages.General.New", "<white>A new ticket has been opened. Type /ticket info $id to view it.");
     configurations.put("Messages.General.Close", "<white>Ticket <green>#$id<white> has been closed by <green>$username<white>.");
     configurations.put("Messages.General.CantClose", "<red>You must be assigned to this ticket in order to close it.");

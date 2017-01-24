@@ -72,7 +72,7 @@ public class TicketCreateCommand extends TNECommand {
     created.addVariable("$id", id + "");
     created.translate(SimpleTicketManager.instance.defaultWorld, sender);
 
-    if(SimpleTicketManager.instance.api.getBoolean("Core.Ticket.Broadcast.New")) {
+    if(SimpleTicketManager.instance.api.getBoolean("Core.Tickets.Broadcast.New")) {
       for(Player p : plugin.getServer().getOnlinePlayers()) {
         if(p.hasPermission("simpletickets.staff.new")) {
           Message statistics = new Message("Messages.General.New");

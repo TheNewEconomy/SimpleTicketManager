@@ -19,7 +19,7 @@ public class ConnectionListener implements Listener {
 
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
-    if(SimpleTicketManager.instance.api.getBoolean("Core.Ticket.Broadcast.Join")) {
+    if(SimpleTicketManager.instance.api.getBoolean("Core.Tickets.Broadcast.Join")) {
       Message statistics = new Message("Messages.General.Statistics");
       statistics.addVariable("$total", SimpleTicketManager.instance.manager.tickets.size() + "");
       statistics.addVariable("$open", SimpleTicketManager.instance.manager.getOpened() + "");

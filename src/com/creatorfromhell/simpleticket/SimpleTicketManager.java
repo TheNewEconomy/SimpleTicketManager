@@ -3,9 +3,16 @@ package com.creatorfromhell.simpleticket;
 import com.creatorfromhell.simpleticket.commands.ticket.TicketCommand;
 import com.creatorfromhell.simpleticket.core.TicketManager;
 import com.creatorfromhell.simpleticket.core.configurations.MainConfiguration;
+import com.creatorfromhell.simpleticket.core.configurations.MessageConfigurations;
 import com.creatorfromhell.simpleticket.listeners.ConnectionListener;
 import com.github.tnerevival.TNELib;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -15,6 +22,9 @@ import java.util.TimeZone;
  **/
 public class SimpleTicketManager extends TNELib {
 
+  //Configurations
+  public File messages;
+  public FileConfiguration messageConfigurations;
 
   public static SimpleTicketManager instance;
   public TicketManager manager;
@@ -30,16 +40,17 @@ public class SimpleTicketManager extends TNELib {
 
     super.onEnable();
 
+    configurations.loadAll();
+    configurations.add(new MainConfiguration(), "main");
+    configurations.add(new MessageConfigurations(), "messages");
+    configurations.updateLoad();
+
     //Commands
     super.registerCommand(new String[] { "ticket", "t"}, new TicketCommand(this));
 
-    configurations.loadAll();
-    configurations.add(new MainConfiguration(), "main");
-    configurations.updateLoad();
-
-    cache = api.getBoolean("Core.Transactions.Cache");
+    cache = api.getBoolean("Core.MySQL.Transactions.Cache");
     saveFormat = "mysql";
-    update = api.getInteger("Core.Transactions.Update");
+    update = api.getInteger("Core.MySQL.Transactions.Update");
 
     manager = new TicketManager();
     sqlManager = new SimpleSQLManager(api.getString("Core.MySQL.Host"), api.getInteger("Core.MySQL.Port"),
@@ -53,16 +64,41 @@ public class SimpleTicketManager extends TNELib {
   }
 
   private void initializeConfigurations() {
+    messages = new File(getDataFolder(), "messages.yml");
+    messageConfigurations = YamlConfiguration.loadConfiguration(messages);
+    try {
+      setConfigurationDefaults();
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
   }
 
   public void loadConfigurations() {
+    getConfig().options().copyDefaults(true);
+    messageConfigurations.options().copyDefaults(true);
     super.loadConfigurations();
+    saveConfigurations(false);
   }
 
   public void saveConfigurations(boolean check) {
+    if(!check || !new File(getDataFolder(), "config.yml").exists() || configurations.changed.contains("config.yml")) {
+      saveConfig();
+    }
+    try {
+      if (!check || !messages.exists() || configurations.changed.contains(messageConfigurations.getName())) {
+        messageConfigurations.save(messages);
+      }
+    } catch(Exception e) {
+
+    }
   }
 
-  public void setConfigurationDefaults() {
+  public void setConfigurationDefaults() throws UnsupportedEncodingException {
+    Reader messagesStream = new InputStreamReader(this.getResource("messages.yml"), "UTF8");
+    if (messagesStream != null) {
+      YamlConfiguration config = YamlConfiguration.loadConfiguration(messagesStream);
+      messageConfigurations.setDefaults(config);
+    }
   }
 
   public static String join(String[] array, String separator) {

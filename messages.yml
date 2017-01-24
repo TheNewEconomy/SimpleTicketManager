@@ -2,11 +2,11 @@
 Messages:
     General:
         Statistics: <white>====== [<green>SimpleTicketManager<white>] ======<newline><white>There has been a total of <green>$total<white> tickets created.<newline><white>Of these, <green>$open<white> are open, <green>$assigned<white> have been assigned, and <green>$closed<white> have been closed.
-        Ticket: <white>Ticket: <green>$id<newline>Created by <green>$author<white>on<green>$created<white>.<newline>Status is <green>$status<white> with <green>$comments<white> $comments_string.<newline>Currently assigned: <green>$assignee<white>.<newline>Players Online: <green>$player_count<newline>$description
+        Ticket: <white>Ticket <green>$id<newline>Created by <green>$author<white>on<green>$created<white>.<newline>Status is <green>$status<white> with <green>$comments<white> $comments_string.<newline>Currently assigned <green>$assignee<white>.<newline>Players Online <green>$player_count<newline>$description
         Comment: <white>Comment <green>\#$id<white> posted by <green>$author<white> on <green>$created<newline>$comment
         CommentsHeader: <white>Comments for Ticket <green>\#$id<white>. Page <green>$page<white>/$max.
         TicketHeader: <white>====== [<green>Simple Tickets<white>] ====== Page <green>$page<white>/$max.
-        TicketShort: <white>Ticket: <green>$id<newline>$description
+        TicketShort: <white>Ticket <green>$id<newline>$description
         New: <white>A new ticket has been opened. Type /ticket info $id to view it.
         Close: <white>Ticket <green>\#$id<white> has been closed by <green>$username<white>.
         CantClose: <red>You must be assigned to this ticket in order to close it.

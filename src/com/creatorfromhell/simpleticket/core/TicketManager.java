@@ -100,14 +100,14 @@ public class TicketManager {
 
   public void ban(UUID id) {
     String table = SimpleTicketManager.instance.sqlManager.getPrefix() + "_BANNED";
-    SimpleTicketManager.instance.sqlManager.sql().executePreparedUpdate("DELETE FROM " + table + " WHERE banned_player = ?", new Object[] {
+    SimpleTicketManager.instance.sqlManager.mysql().executePreparedUpdate("DELETE FROM " + table + " WHERE banned_player = ?", new Object[] {
       id.toString()
     });
   }
 
   public void unban(UUID id) {
     String table = SimpleTicketManager.instance.sqlManager.getPrefix() + "_BANNED";
-    SimpleTicketManager.instance.sqlManager.sql().executePreparedUpdate("INSERT INTO " + table + " (banned_player) VALUES (?)", new Object[] {
+    SimpleTicketManager.instance.sqlManager.mysql().executePreparedUpdate("INSERT INTO " + table + " (banned_player) VALUES (?)", new Object[] {
       id.toString()
     });
   }

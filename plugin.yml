@@ -1,3 +1,5 @@
 name: SimpleTicketManager
 main: com.creatorfromhell.simpleticket.SimpleTicketManager
 version: 1.0.0
+description: A simple ticket manager.
+author: creatorfromhell
