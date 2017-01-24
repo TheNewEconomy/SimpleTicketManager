@@ -39,8 +39,9 @@ public class SimpleSQLManager extends SQLManager {
   }
 
   public void saveTicket(Ticket ticket) {
-    String table = SimpleTicketManager.instance.sqlManager.getPrefix() + "_TICKETS";
-    mysql().executePreparedUpdate("INSERT INTO `" + table + "` (ticket_id, ticket_created, ticket_closed, ticket_author, ticket_server, ticket_location, ticket_players, " +
+    String table = prefix + "_TICKETS";
+    mysql().connect();
+    mysql().executePreparedUpdate("INSERT INTO `" + prefix + "_TICKETS" + "` (ticket_id, ticket_created, ticket_closed, ticket_author, ticket_server, ticket_location, ticket_players, " +
             "ticket_assigned, ticket_closedby, ticket_description, ticket_closereason, ticket_status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
             " ON DUPLICATE KEY UPDATE ticket_closed = ?, ticket_assigned = ?, ticket_closedby = ?, ticket_closereason = ?, ticket_status = ?",
         new Object[] {
@@ -51,7 +52,7 @@ public class SimpleSQLManager extends SQLManager {
             ticket.getServer(),
             new SerializableLocation(ticket.getLocation()).toString(),
             ticket.getPlayers(),
-            ticket.assigneeString(),
+            ticket.getAssignmentString(),
             ticket.getClosedBy().toString(),
             ticket.getDescription(),
             ticket.getCloseReason(),
@@ -68,6 +69,7 @@ public class SimpleSQLManager extends SQLManager {
     for(TicketComment comment : ticket.comments.values()) {
       saveComment(comment);
     }
+    mysql().close();
   }
 
   public Collection<Ticket> loadTickets() {
@@ -138,6 +140,7 @@ public class SimpleSQLManager extends SQLManager {
             comment.getComment(),
         }
     );
+    mysql().close();
   }
 
   public Collection<TicketComment> loadComments() {

@@ -52,7 +52,7 @@ public class TicketCreateCommand extends TNECommand {
 
   @Override
   public boolean execute(CommandSender sender, String command, String[] arguments) {
-    if(arguments.length < 2) {
+    if(arguments.length < 1) {
       help(sender);
       return false;
     }

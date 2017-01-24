@@ -53,10 +53,10 @@ public class SimpleTicketManager extends TNELib {
     update = api.getInteger("Core.MySQL.Transactions.Update");
 
     manager = new TicketManager();
-    sqlManager = new SimpleSQLManager(api.getString("Core.MySQL.Host"), api.getInteger("Core.MySQL.Port"),
-                                api.getString("Core.MySQL.Database"), api.getString("Core.MySQL.User"),
-                                api.getString("Core.MySQL.Password"), api.getString("Core.MySQL.Prefix"),
-                                "", "", ""
+    sqlManager = new SimpleSQLManager(configurations.getString("Core.MySQL.Host"), configurations.getInt("Core.MySQL.Port"),
+        configurations.getString("Core.MySQL.Database"), configurations.getString("Core.MySQL.User"),
+        configurations.getString("Core.MySQL.Password"), configurations.getString("Core.MySQL.Prefix"),
+        "", "", ""
     );
 
     //Listeners

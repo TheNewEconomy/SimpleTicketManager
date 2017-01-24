@@ -41,7 +41,7 @@ public class Ticket {
   }
 
   public String assigneeString() {
-    Assignment[] assignments = (Assignment[])assigned.toArray();
+    Assignment[] assignments = assigned.toArray(new Assignment[assigned.size()]);
     StringBuilder builder = new StringBuilder();
 
     for(int i = 0; i < assignments.length; i++) {
