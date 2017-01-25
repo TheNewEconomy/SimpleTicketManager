@@ -8,10 +8,7 @@ import com.creatorfromhell.simpleticket.listeners.TicketListener;
 import com.github.tnerevival.core.collection.EventMap;
 import com.github.tnerevival.user.IDFinder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by creatorfromhell on 1/2/2017.
@@ -26,17 +23,18 @@ public class TicketManager {
     tickets.setListener(ticketListener);
   }
 
-  public List<Ticket> sort(String server, String status, String assigned) {
-    List<Ticket> sorted = new ArrayList<>();
+  public Collection<Ticket> sort(String server, String status, String assigned) {
+    TreeMap<Integer, Ticket> sorted = new TreeMap<>();
 
-    for(Ticket t : tickets.values()) {
+    Collection<Ticket> values = tickets.values();
+
+    for(Ticket t : values) {
       if(!server.equalsIgnoreCase("all") && !server.equalsIgnoreCase(t.getServer())) continue;
-      if(!status.equalsIgnoreCase("all") && !status.equalsIgnoreCase(t.getStatus().name())) continue;
+      if(!status.equalsIgnoreCase("all") && !status.equalsIgnoreCase(t.getStatus().getName())) continue;
       if(!assigned.equalsIgnoreCase("all") && !assigned.equalsIgnoreCase("no one") && !t.isAssigned(IDFinder.getID(assigned)) || assigned.equalsIgnoreCase("no one") && t.getAssigned().size() != 0) continue;
-
-      sorted.add(t);
+      sorted.put(t.getId(), t);
     }
-    return sorted;
+    return sorted.values();
   }
 
   public int getAssignedCount(UUID player) {
@@ -71,7 +69,9 @@ public class TicketManager {
   }
 
   public static String formatNames(Collection<String> names) {
-    String[] namesArray = (String[])names.toArray();
+    if(names.size() == 0) return "no one";
+    String[] namesArray = names.toArray(new String[names.size()]);
+
     StringBuilder builder = new StringBuilder();
 
     for(int i = 0; i < namesArray.length; i++) {

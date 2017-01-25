@@ -61,7 +61,7 @@ public class CommentListener implements MapListener {
     return SimpleTicketManager.instance.sqlManager.loadComments();
   }
 
-  public Collection values(int ticket) {
+  public Collection<TicketComment> values(int ticket) {
     return SimpleTicketManager.instance.sqlManager.loadComments(ticket);
   }
 

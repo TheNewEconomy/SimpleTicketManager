@@ -48,9 +48,9 @@ public class SimpleTicketManager extends TNELib {
     //Commands
     super.registerCommand(new String[] { "ticket", "t"}, new TicketCommand(this));
 
-    cache = api.getBoolean("Core.MySQL.Transactions.Cache");
+    cache = configurations.getBoolean("Core.MySQL.Transactions.Cache");
     saveFormat = "mysql";
-    update = api.getInteger("Core.MySQL.Transactions.Update");
+    update = configurations.getInt("Core.MySQL.Transactions.Update");
 
     manager = new TicketManager();
     sqlManager = new SimpleSQLManager(configurations.getString("Core.MySQL.Host"), configurations.getInt("Core.MySQL.Port"),

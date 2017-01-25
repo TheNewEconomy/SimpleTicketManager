@@ -10,7 +10,7 @@ import com.github.tnerevival.user.IDFinder;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * Created by creatorfromhell on 1/7/2017.
@@ -104,11 +104,7 @@ public class TicketViewCommand extends TNECommand {
         }
       }
     }
-    Paginator paginator = new Paginator(Arrays.asList(new HashSet<Object>(SimpleTicketManager.instance.manager.sort(server, status, assigned)).toArray()), SimpleTicketManager.instance.configurations.getInt("Core.Tickets.MaxTickets"));
-
-    if(arguments.length >= 2) {
-      page = Integer.valueOf(arguments[1]);
-    }
+    Paginator paginator = new Paginator(Arrays.asList(new LinkedHashSet<Object>(SimpleTicketManager.instance.manager.sort(server, status, assigned)).toArray()), SimpleTicketManager.configurations.getInt("Core.Tickets.MaxTickets"));
 
     if(page > paginator.getMaxPages()) page = paginator.getMaxPages();
 
@@ -125,7 +121,6 @@ public class TicketViewCommand extends TNECommand {
       info.addVariable("$id", t.getId() + "");
       info.addVariable("$description", t.getDescription());
       info.translate(SimpleTicketManager.instance.defaultWorld, sender);
-      return true;
     }
     return true;
   }

@@ -12,7 +12,7 @@ import com.github.tnerevival.user.IDFinder;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * Created by creatorfromhell on 1/7/2017.
@@ -69,7 +69,7 @@ public class TicketCommentsCommand extends TNECommand {
 
 
     Ticket t = SimpleTicketManager.instance.manager.getTicket(id);
-    Paginator paginator = new Paginator(Arrays.asList(new HashSet<Object>(((CommentListener)t.comments.getListener()).values(id)).toArray()), SimpleTicketManager.instance.configurations.getInt("Core.Tickets.MaxComments"));
+    Paginator paginator = new Paginator(Arrays.asList(new LinkedHashSet<Object>(((CommentListener)t.comments.getListener()).values(id)).toArray()), SimpleTicketManager.instance.configurations.getInt("Core.Tickets.MaxComments"));
 
     int page = 1;
     if(arguments.length >= 2) {
@@ -90,7 +90,7 @@ public class TicketCommentsCommand extends TNECommand {
 
       Message commentMessage = new Message("Messages.General.Comment");
       commentMessage.addVariable("$id", comment.getId() + "");
-      commentMessage.addVariable("$author", IDFinder.getPlayer(comment.getPlayer()).getName());
+      commentMessage.addVariable("$author", IDFinder.getUsername(comment.getPlayer().toString()));
       commentMessage.addVariable("$created", SimpleTicketManager.formatTime(comment.getCreated()));
       commentMessage.addVariable("$comment", comment.getComment());
       commentMessage.translate(SimpleTicketManager.instance.defaultWorld, sender);

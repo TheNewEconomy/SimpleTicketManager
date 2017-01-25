@@ -9,7 +9,6 @@ import com.github.tnerevival.user.IDFinder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -57,7 +56,7 @@ public class TicketCreateCommand extends TNECommand {
       return false;
     }
     Integer id = SimpleTicketManager.instance.manager.freeID();
-    String description = SimpleTicketManager.join(Arrays.copyOfRange(arguments, 1, arguments.length), " ");
+    String description = SimpleTicketManager.join(arguments, " ");
 
     Ticket t = new Ticket(id, IDFinder.getID(getPlayer(sender)), TicketStatus.OPEN);
     t.setCreated(new Date().getTime());
@@ -68,7 +67,7 @@ public class TicketCreateCommand extends TNECommand {
 
     SimpleTicketManager.instance.manager.tickets.put(id, t);
 
-    Message created = new Message("Messages.General.Created");
+    Message created = new Message("Messages.Command.Created");
     created.addVariable("$id", id + "");
     created.translate(SimpleTicketManager.instance.defaultWorld, sender);
 

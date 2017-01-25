@@ -75,7 +75,7 @@ public class TicketListener implements MapListener {
 
   @Override
   public boolean containsKey(Object key) {
-    return get(key) != null;
+    return SimpleTicketManager.instance.sqlManager.containsTicket((int)key);
   }
 
   @Override

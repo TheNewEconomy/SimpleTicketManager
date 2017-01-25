@@ -22,10 +22,7 @@ import com.creatorfromhell.simpleticket.core.ticket.TicketStatus;
 import com.github.tnerevival.core.SQLManager;
 import com.github.tnerevival.serializable.SerializableLocation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by creatorfromhell on 1/16/2017.
@@ -38,10 +35,22 @@ public class SimpleSQLManager extends SQLManager {
     super(mysqlHost, mysqlPort, mysqlDatabase, mysqlUser, mysqlPassword, prefix, h2File, sqliteFile, flatfile);
   }
 
+  public boolean containsTicket(int id) {
+    String table = prefix + "_TICKETS";
+    try {
+      int ticketIndex = mysql().executePreparedQuery("SELECT * FROM " + table + " WHERE ticket_id = ?", new Object[]{
+          id
+      });
+      return mysql().results(ticketIndex).next();
+    } catch(Exception e) {
+
+    }
+    return false;
+  }
+
   public void saveTicket(Ticket ticket) {
     String table = prefix + "_TICKETS";
-    mysql().connect();
-    mysql().executePreparedUpdate("INSERT INTO `" + prefix + "_TICKETS" + "` (ticket_id, ticket_created, ticket_closed, ticket_author, ticket_server, ticket_location, ticket_players, " +
+    mysql().executePreparedUpdate("INSERT INTO `" + table + "` (ticket_id, ticket_created, ticket_closed, ticket_author, ticket_server, ticket_location, ticket_players, " +
             "ticket_assigned, ticket_closedby, ticket_description, ticket_closereason, ticket_status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
             " ON DUPLICATE KEY UPDATE ticket_closed = ?, ticket_assigned = ?, ticket_closedby = ?, ticket_closereason = ?, ticket_status = ?",
         new Object[] {
@@ -53,13 +62,13 @@ public class SimpleSQLManager extends SQLManager {
             new SerializableLocation(ticket.getLocation()).toString(),
             ticket.getPlayers(),
             ticket.getAssignmentString(),
-            ticket.getClosedBy().toString(),
+            (ticket.getClosedBy() == null)? "" : ticket.getClosedBy().toString(),
             ticket.getDescription(),
             ticket.getCloseReason(),
-            ticket.getStatus().name(),
+            ticket.getStatus().getID(),
             ticket.getClosed(),
             ticket.getAssignmentString(),
-            ticket.getClosedBy().toString(),
+            (ticket.getClosedBy() == null)? "" : ticket.getClosedBy().toString(),
             ticket.getCloseReason(),
             ticket.getStatus().getID(),
         }
@@ -77,42 +86,45 @@ public class SimpleSQLManager extends SQLManager {
 
     String table = getPrefix() + "_TICKETS";
     try {
-      int ticketIndex = mysql().executeQuery("SELECT * FROM " + table + ";");
+      int ticketIndex = mysql().executeQuery("SELECT * FROM " + table + " ORDER BY ticket_id ASC;");
       while (mysql().results(ticketIndex).next()) {
-        Ticket ticket = new Ticket(mysql().results(ticketIndex).getInt("ticket_id"), UUID.fromString(mysql().results(ticketIndex).getString("ticket_author")), TicketStatus.valueOf(mysql().results(ticketIndex).getString("ticket_status")));
+        Ticket ticket = new Ticket(mysql().results(ticketIndex).getInt("ticket_id"), UUID.fromString(mysql().results(ticketIndex).getString("ticket_author")), TicketStatus.fromID(mysql().results(ticketIndex).getInt("ticket_status")));
         ticket.setCreated(mysql().results(ticketIndex).getLong("ticket_created"));
         ticket.setClosed(mysql().results(ticketIndex).getLong("ticket_closed"));
         ticket.setServer(mysql().results(ticketIndex).getString("ticket_server"));
         ticket.setLocation(SerializableLocation.fromString(mysql().results(ticketIndex).getString("ticket_location")).getLocation());
         ticket.setPlayers(mysql().results(ticketIndex).getInt("ticket_players"));
         ticket.assignmentFromString(mysql().results(ticketIndex).getString("ticket_assigned"));
-        ticket.setClosedBy(UUID.fromString(mysql().results(ticketIndex).getString("ticket_closedby")));
+        String closedBy = mysql().results(ticketIndex).getString("ticket_closedby");
+        ticket.setClosedBy((closedBy.trim().equals(""))? null : UUID.fromString(closedBy));
         ticket.setDescription(mysql().results(ticketIndex).getString("ticket_description"));
         ticket.setCloseReason(mysql().results(ticketIndex).getString("ticket_closereason"));
-        ticket.setStatus(TicketStatus.fromID(mysql().results(ticketIndex).getInt("ticket_status")));
+        ticket.setStatus(TicketStatus.fromID(mysql().results(ticketIndex).getInt("ticket_status")));                                                                                       ;
         ticketList.add(ticket);
       }
       mysql().close();
     } catch(Exception e) {
+      e.printStackTrace();
     }
     return ticketList;
   }
 
   public Ticket loadTicket(int id) {
-    String table = SimpleTicketManager.instance.sqlManager.getPrefix() + "_TICKETS";
+    String table = prefix + "_TICKETS";
     try {
       int ticketIndex = mysql().executePreparedQuery("SELECT * FROM " + table + " WHERE ticket_id = ?", new Object[] {
           id
       });
       if(mysql().results(ticketIndex).next()) {
-        Ticket ticket = new Ticket(mysql().results(ticketIndex).getInt("ticket_id"), UUID.fromString(mysql().results(ticketIndex).getString("ticket_author")), TicketStatus.valueOf(mysql().results(ticketIndex).getString("ticket_status")));
+        Ticket ticket = new Ticket(mysql().results(ticketIndex).getInt("ticket_id"), UUID.fromString(mysql().results(ticketIndex).getString("ticket_author")), TicketStatus.fromID(mysql().results(ticketIndex).getInt("ticket_status")));
         ticket.setCreated(mysql().results(ticketIndex).getLong("ticket_created"));
         ticket.setClosed(mysql().results(ticketIndex).getLong("ticket_closed"));
         ticket.setServer(mysql().results(ticketIndex).getString("ticket_server"));
         ticket.setLocation(SerializableLocation.fromString(mysql().results(ticketIndex).getString("ticket_location")).getLocation());
         ticket.setPlayers(mysql().results(ticketIndex).getInt("ticket_players"));
         ticket.assignmentFromString(mysql().results(ticketIndex).getString("ticket_assigned"));
-        ticket.setClosedBy(UUID.fromString(mysql().results(ticketIndex).getString("ticket_closedby")));
+        String closedBy = mysql().results(ticketIndex).getString("ticket_closedby");
+        ticket.setClosedBy((closedBy.trim().equals(""))? null : UUID.fromString(closedBy));
         ticket.setDescription(mysql().results(ticketIndex).getString("ticket_description"));
         ticket.setCloseReason(mysql().results(ticketIndex).getString("ticket_closereason"));
         ticket.setStatus(TicketStatus.fromID(mysql().results(ticketIndex).getInt("ticket_status")));
@@ -144,21 +156,21 @@ public class SimpleSQLManager extends SQLManager {
   }
 
   public Collection<TicketComment> loadComments() {
-    List<TicketComment> commentList = new ArrayList<>();
+    TreeMap<Integer, TicketComment> comments = new TreeMap<>();
 
     String table = SimpleTicketManager.instance.sqlManager.getPrefix() + "_COMMENTS";
     try {
-      int commentIndex = mysql().executeQuery("SELECT * FROM " + table + ";");
+      int commentIndex = mysql().executeQuery("SELECT * FROM " + table + " ORDER BY comment_id ASC;");
       while (mysql().results(commentIndex).next()) {
         TicketComment comment = new TicketComment(mysql().results(commentIndex).getInt("comment_ticket"), mysql().results(commentIndex).getInt("comment_id"), UUID.fromString(mysql().results(commentIndex).getString("comment_author")));
         comment.setCreated(mysql().results(commentIndex).getLong("comment_created"));
         comment.setComment(mysql().results(commentIndex).getString("comment_text"));
-        commentList.add(comment);
+        comments.put(comment.getId(), comment);
       }
       mysql().close();
     } catch(Exception e) {
     }
-    return commentList;
+    return comments.values();
   }
 
   public Collection<TicketComment> loadComments(int ticket) {
@@ -166,7 +178,7 @@ public class SimpleSQLManager extends SQLManager {
 
     String table = SimpleTicketManager.instance.sqlManager.getPrefix() + "_COMMENTS";
     try {
-      int commentIndex = mysql().executePreparedQuery("SELECT * FROM " + table + " WHERE comment_ticket = ?;", new Object[] {
+      int commentIndex = mysql().executePreparedQuery("SELECT * FROM " + table + " WHERE comment_ticket = ? ORDER BY comment_id ASC;", new Object[] {
         ticket
       });
       while (mysql().results(commentIndex).next()) {

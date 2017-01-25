@@ -37,11 +37,11 @@ public class MessageConfigurations extends Configuration {
   @Override
   public void load(FileConfiguration configurationFile) {
     configurations.put("Messages.General.Statistics", "<white>====== [<green>SimpleTicketManager<white>] ======<newline><white>There has been a total of <green>$total<white> tickets created.<newline><white>Of these, <green>$open<white> are open, <green>$assigned<white> have been assigned, and <green>$closed<white> have been closed.");
-    configurations.put("Messages.General.Ticket", "<white>Ticket <green>$id<newline>Created by <green>$author<white>on<green>$created<white>.<newline>Status is <green>$status<white> with <green>$comments<white> $comments_string.<newline>Currently assigned <green>$assignee<white>.<newline>Players Online <green>$player_count<newline>$description");
+    configurations.put("Messages.General.Ticket", "<white>Ticket <green>$id<newline>Created by: <green>$author <white>on <green>$created<white>.<newline>Status is <green>$status<white> with <green>$comments<white> $comments_string.<newline>Currently assigned: <green>$assignee<white>.<newline>Players Online: <green>$player_count<newline> Description:<newline>$description");
     configurations.put("Messages.General.Comment", "<white>Comment <green>#$id<white> posted by <green>$author<white> on <green>$created<newline>$comment");
-    configurations.put("Messages.General.CommentsHeader", "<white>Comments for Ticket <green>#$id<white>. Page <green>$page<white>/$max.");
-    configurations.put("Messages.General.TicketHeader", "<white>====== [<green>Simple Tickets<white>] ====== Page <green>$page<white>/$max.");
-    configurations.put("Messages.General.TicketShort", "<white>Ticket <green>$id<newline>$description");
+    configurations.put("Messages.General.CommentsHeader", "<white>====== [<green>SimpleTicketManager<white>] Comments for Ticket <green>#$id<white> ====== Page $page<white>/$max.");
+    configurations.put("Messages.General.TicketHeader", "<white>====== [<green>SimpleTicketManager<white>] ====== Page $page<white>/$max.");
+    configurations.put("Messages.General.TicketShort", "<white>====== Ticket <green>#$id<white> ======<newline>Description: <newline>$description");
     configurations.put("Messages.General.New", "<white>A new ticket has been opened. Type /ticket info $id to view it.");
     configurations.put("Messages.General.Close", "<white>Ticket <green>#$id<white> has been closed by <green>$username<white>.");
     configurations.put("Messages.General.CantClose", "<red>You must be assigned to this ticket in order to close it.");
@@ -54,8 +54,8 @@ public class MessageConfigurations extends Configuration {
     configurations.put("Messages.Command.ReAssigned", "<white>You have successfully reassigned ticked <green>#$id<white> to $assignee.");
     configurations.put("Messages.Command.Banned", "<white>Successfully banned player \"$username\" from the ticket system.");
     configurations.put("Messages.Command.UnBanned", "<white>Successfully unbanned player \"$username\" from the ticket system.");
-    configurations.put("Messages.Command.Closed", "<white>Ticket <green>#$id<white> has been closed by $username.");
-    configurations.put("Messages.Command.Opened", "<white>Ticket <green>#$id<white> has been reopened by $username.");
+    configurations.put("Messages.Command.Closed", "<white>Ticket <green>#$id<white> has been closed by <green>$username<white>.");
+    configurations.put("Messages.Command.Opened", "<white>Ticket <green>#$id<white> has been reopened by <green>$username<white>.");
     configurations.put("Messages.Command.Teleported", "<white>You have been teleported to the location where ticket <green>#$id<white> was created.");
     configurations.put("Messages.Command.Created", "<white>Your ticket has been created! Your ticket id is <green>$id<white>. You may view future ticket updates using /ticket info $id.<newline><white>You may also view your ticket's comments using /ticket comments $id.");
     configurations.put("Messages.Command.Comment", "<white>Your comment has been posted for ticket <green>#$id<white>.");

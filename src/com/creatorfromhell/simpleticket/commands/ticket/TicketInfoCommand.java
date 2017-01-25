@@ -2,6 +2,7 @@ package com.creatorfromhell.simpleticket.commands.ticket;
 
 import com.creatorfromhell.simpleticket.SimpleTicketManager;
 import com.creatorfromhell.simpleticket.core.ticket.Ticket;
+import com.creatorfromhell.simpleticket.listeners.CommentListener;
 import com.github.tnerevival.commands.TNECommand;
 import com.github.tnerevival.core.Message;
 import com.github.tnerevival.user.IDFinder;
@@ -66,10 +67,10 @@ public class TicketInfoCommand extends TNECommand {
 
     Message info = new Message("Messages.General.Ticket");
     info.addVariable("$id", id + "");
-    info.addVariable("$author", IDFinder.getPlayer(t.getPlayer()).getDisplayName() + "");
+    info.addVariable("$author", IDFinder.getUsername(t.getPlayer().toString()) + "");
     info.addVariable("$created", SimpleTicketManager.formatTime(t.getCreated()));
     info.addVariable("$status", t.getStatus().name());
-    info.addVariable("$comments", t.comments.size() + "");
+    info.addVariable("$comments", ((CommentListener)t.comments.getListener()).values(t.getId()).size() + "");
     info.addVariable("$comments_string", comments + "");
     info.addVariable("$assignee", t.assigneeString() + "");
     info.addVariable("$player_count", t.getPlayers() + "");

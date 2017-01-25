@@ -18,16 +18,16 @@ public class Ticket {
 
   private int id;
   private long created;
-  private long closed;
+  private long closed = 0;
   private UUID player;
-  private String server;
+  private String server = "";
   private Location location;
-  private int players;
+  private int players = 0;
 
   private UUID closedBy;
-  private String closeReason;
+  private String closeReason = "";
   private String description;
-  private TicketStatus status;
+  private TicketStatus status = TicketStatus.OPEN;
 
   public Ticket(int id, UUID player, TicketStatus status) {
     this.id = id;
@@ -41,6 +41,7 @@ public class Ticket {
   }
 
   public String assigneeString() {
+    if(assigned.size() == 0) return "no one";
     Assignment[] assignments = assigned.toArray(new Assignment[assigned.size()]);
     StringBuilder builder = new StringBuilder();
 
@@ -49,7 +50,7 @@ public class Ticket {
         String addition = (i < assignments.length - 1)? ", " : " and ";
         builder.append(addition);
       }
-      builder.append(IDFinder.getPlayer(assignments[i].getAssignee()).getName());
+      builder.append(IDFinder.getUsername(assignments[i].getAssignee().toString()));
     }
     return builder.toString();
   }
@@ -62,6 +63,7 @@ public class Ticket {
       UUID id = IDFinder.getID(s);
       if(id != null && !isAssigned(id)) {
         assignedList.add(s);
+        if(status.equals(TicketStatus.OPEN)) status = TicketStatus.ASSIGNED;
         assigned.add(new Assignment(id, IDFinder.getID(assigner), new Date().getTime()));
       }
     }
@@ -160,6 +162,7 @@ public class Ticket {
         i.remove();
       }
     }
+    if(assigned.size() == 0) setStatus(TicketStatus.OPEN);
   }
 
   public String getAssignmentString() {
@@ -173,6 +176,7 @@ public class Ticket {
   }
 
   public void assignmentFromString(String data) {
+    if(data == null || data.trim().equalsIgnoreCase("")) return;
     String[] assignments = data.split(";");
 
     for(String s : assignments) {

@@ -39,6 +39,8 @@ public class MainConfiguration extends Configuration {
     configurations.put("Core.Time.Format", "M, d y");
     configurations.put("Core.Time.Timezone", "US/Eastern");
     configurations.put("Core.Tickets.Max", 10);
+    configurations.put("Core.Tickets.MaxTickets", 5);
+    configurations.put("Core.Tickets.MaxComments", 5);
     configurations.put("Core.Tickets.OthersClose", false);
     configurations.put("Core.Tickets.Broadcast.New", true);
     configurations.put("Core.Tickets.Broadcast.Join", true);
