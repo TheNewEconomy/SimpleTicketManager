@@ -48,14 +48,16 @@ public class MainConfiguration extends Configuration {
 
     configurations.put("Core.Server.Specific", false);
 
-    configurations.put("Core.MySQL.Transactions.Cache", true);
-    configurations.put("Core.MySQL.Transactions.Update", 600);
-    configurations.put("Core.MySQL.Prefix", "ST");
-    configurations.put("Core.MySQL.Host", "localhost");
-    configurations.put("Core.MySQL.Port", 3306);
-    configurations.put("Core.MySQL.Database", "Tickets");
-    configurations.put("Core.MySQL.User", "user");
-    configurations.put("Core.MySQL.Password", "password");
+    configurations.put("Core.SQL.Transactions.Cache", true);
+    configurations.put("Core.SQL.Transactions.Update", 600);
+    configurations.put("Core.SQL.Format", "mysql");
+    configurations.put("Core.SQL.H2File", "Tickets");
+    configurations.put("Core.SQL.Prefix", "ST");
+    configurations.put("Core.SQL.Host", "localhost");
+    configurations.put("Core.SQL.Port", 3306);
+    configurations.put("Core.SQL.Database", "Tickets");
+    configurations.put("Core.SQL.User", "user");
+    configurations.put("Core.SQL.Password", "password");
 
     super.load(configurationFile);
   }

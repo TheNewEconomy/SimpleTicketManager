@@ -48,19 +48,25 @@ public class SimpleTicketManager extends TNELib {
     //Commands
     super.registerCommand(new String[] { "ticket", "t"}, new TicketCommand(this));
 
-    cache = configurations.getBoolean("Core.MySQL.Transactions.Cache");
-    saveFormat = "mysql";
-    update = configurations.getInt("Core.MySQL.Transactions.Update");
+    cache = configurations.getBoolean("Core.SQL.Transactions.Cache");
+    saveFormat = configurations.getString("Core.SQL.Format");
+    update = configurations.getInt("Core.SQL.Transactions.Update");
 
     manager = new TicketManager();
-    sqlManager = new SimpleSQLManager(configurations.getString("Core.MySQL.Host"), configurations.getInt("Core.MySQL.Port"),
-        configurations.getString("Core.MySQL.Database"), configurations.getString("Core.MySQL.User"),
-        configurations.getString("Core.MySQL.Password"), configurations.getString("Core.MySQL.Prefix"),
-        "", "", ""
+    sqlManager = new SimpleSQLManager(configurations.getString("Core.SQL.Host"), configurations.getInt("Core.SQL.Port"),
+        configurations.getString("Core.SQL.Database"), configurations.getString("Core.SQL.User"),
+        configurations.getString("Core.SQL.Password"), configurations.getString("Core.SQL.Prefix"),
+        configurations.getString("Core.SQL.H2File"), "", ""
     );
 
     //Listeners
     getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
+
+    sqlManager.load();
+  }
+
+  public void onDisable() {
+    sqlManager.save();
   }
 
   private void initializeConfigurations() {

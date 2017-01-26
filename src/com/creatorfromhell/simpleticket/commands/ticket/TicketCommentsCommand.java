@@ -77,6 +77,7 @@ public class TicketCommentsCommand extends TNECommand {
     }
 
     if(page > paginator.getMaxPages()) page = paginator.getMaxPages();
+    System.out.println(paginator.getMaxPages());
 
     Page p = paginator.getPage(page);
     Message header = new Message("Messages.General.CommentsHeader");

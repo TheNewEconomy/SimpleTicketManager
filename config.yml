@@ -45,8 +45,8 @@ Core:
         #Whether or not tickets should only be accessible on the server they were created
         Specific: false
 
-    #All configurations relating to the MySQL Database
-    MySQL:
+    #All configurations relating to the Database
+    SQL:
 
         #All configurations relating to direct-SQL transactions for data
         Transactions:
@@ -55,6 +55,12 @@ Core:
 
             #The rate(in seconds) at which data from the cache is stored in the database.
             Update: 600
+
+        #The save format to use, currently only H2, and MySQL.
+        Format: 'mysql'
+
+        #The file to use if Format = h2
+        H2File: 'Tickets'
 
         #The prefix to use for SimpleTicketManager MySQL Tables
         Prefix: ST
