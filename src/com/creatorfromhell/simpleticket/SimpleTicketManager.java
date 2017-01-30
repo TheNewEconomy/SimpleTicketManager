@@ -4,8 +4,10 @@ import com.creatorfromhell.simpleticket.commands.ticket.TicketCommand;
 import com.creatorfromhell.simpleticket.core.TicketManager;
 import com.creatorfromhell.simpleticket.core.configurations.MainConfiguration;
 import com.creatorfromhell.simpleticket.core.configurations.MessageConfigurations;
+import com.creatorfromhell.simpleticket.core.version.Release1_0;
 import com.creatorfromhell.simpleticket.listeners.ConnectionListener;
 import com.github.tnerevival.TNELib;
+import com.github.tnerevival.core.SaveManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -29,6 +31,7 @@ public class SimpleTicketManager extends TNELib {
   public static SimpleTicketManager instance;
   public TicketManager manager;
   public SimpleSQLManager sqlManager;
+  public SaveManager saveManager;
 
   public void onEnable() {
     instance = this;
@@ -59,10 +62,12 @@ public class SimpleTicketManager extends TNELib {
         configurations.getString("Core.SQL.H2File"), "", ""
     );
 
+    saveManager = new SaveManager(sqlManager);
+    saveManager.addVersion(new Release1_0(sqlManager));
+    saveManager.initialize();
+
     //Listeners
     getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
-
-    sqlManager.load();
   }
 
   public void onDisable() {
@@ -86,7 +91,7 @@ public class SimpleTicketManager extends TNELib {
     saveConfigurations(false);
   }
 
-  public void saveConfigurations(boolean check) {
+  private void saveConfigurations(boolean check) {
     if(!check || !new File(getDataFolder(), "config.yml").exists() || configurations.changed.contains("config.yml")) {
       saveConfig();
     }
@@ -99,7 +104,7 @@ public class SimpleTicketManager extends TNELib {
     }
   }
 
-  public void setConfigurationDefaults() throws UnsupportedEncodingException {
+  private void setConfigurationDefaults() throws UnsupportedEncodingException {
     Reader messagesStream = new InputStreamReader(this.getResource("messages.yml"), "UTF8");
     if (messagesStream != null) {
       YamlConfiguration config = YamlConfiguration.loadConfiguration(messagesStream);
