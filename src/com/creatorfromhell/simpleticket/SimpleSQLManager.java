@@ -223,6 +223,14 @@ public class SimpleSQLManager extends SQLManager {
   }
 
   public void save() {
+    String table = prefix + "_INFO";
+    sql().executePreparedUpdate("INSERT INTO " + table + "(id, version, server_name) VALUE(?, ?, ?) ON DUPLICATE KEY UPDATE version = ?, server_name = ?", new Object[] {
+        1,
+        SimpleTicketManager.instance.currentSaveVersion,
+        SimpleTicketManager.instance.getServer().getServerName(),
+        SimpleTicketManager.instance.currentSaveVersion,
+        SimpleTicketManager.instance.getServer().getServerName()
+    });
     if(SimpleTicketManager.instance.cache) {
       for (Ticket ticket : SimpleTicketManager.instance.manager.tickets.values()) {
         saveTicket(ticket);

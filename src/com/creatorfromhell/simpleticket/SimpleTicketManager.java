@@ -63,7 +63,7 @@ public class SimpleTicketManager extends TNELib {
     );
 
     saveManager = new SaveManager(sqlManager);
-    saveManager.addVersion(new Release1_0(sqlManager));
+    saveManager.addVersion(new Release1_0(sqlManager), true);
     saveManager.initialize();
 
     //Listeners

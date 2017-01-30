@@ -32,7 +32,7 @@ public class Release1_0 extends Version {
         boolean first = result.next();
         result.close();
         sql().close();
-        return first;
+        return !first;
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -161,7 +161,7 @@ public class Release1_0 extends Version {
       }
       h2().executeUpdate("CREATE TABLE IF NOT EXISTS `" + table + "` (" +
           "`id` INTEGER NOT NULL UNIQUE," +
-          "`version` DOUBLE(10)," +
+          "`version` DOUBLE," +
           "`server_name` VARCHAR(250)" +
           ");");
 
